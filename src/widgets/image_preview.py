@@ -1,0 +1,68 @@
+import os
+import customtkinter
+from src.constants import IMAGE_PATH, VALID_IMAGE_FILE_TYPE;
+from PIL import Image, ImageTk
+from tkinter import Canvas, filedialog
+
+class ImagePreview(customtkinter.CTkFrame):
+    def __init__(self, parent):
+        super().__init__(master=parent, corner_radius=0)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+        self.image_placeholder = ImagePlaceholder(self, self.set_image)
+        self.image_placeholder.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+
+    def set_image(self):
+        path = filedialog.askopenfile(filetypes=[(k, v) for k, v in VALID_IMAGE_FILE_TYPE.items()])
+        if path is None:
+            return
+        filename = path.name
+        is_valid_file_type = any(filename.endswith(t) for t in list(VALID_IMAGE_FILE_TYPE.values()))
+        if not is_valid_file_type:
+            return
+        self.image_placeholder.grid_forget()
+        file = open(path.name, 'rb')
+        self.image = Image.open(file)
+        self.image_ratio = self.image.size[0] / self.image.size[1]
+        self.image_tk = ImageTk.PhotoImage(self.image)
+        self.image_display = ImageDisplay(self, self.resize_image)
+        self.image_display.grid(row=0, column=0, sticky="nsew")
+        self.import_button = customtkinter.CTkButton(self, text="Change Image", command=self.set_image)
+        self.import_button.grid(row=1, column=0, pady=10)
+
+    def resize_image(self, event):
+        canvas_ratio = event.width / event.height
+
+        if canvas_ratio > self.image_ratio:
+            image_height = event.height
+            image_width = image_height * self.image_ratio
+        else: 
+            image_width = event.width
+            image_height = image_width / self.image_ratio
+
+        self.image_display.delete('all')
+        resized_image = self.image.resize((int(image_width), int(image_height)))
+        self.image_tk = ImageTk.PhotoImage(resized_image)
+        self.image_display.create_image(event.width / 2, event.height / 2, image=self.image_tk)
+
+class ImagePlaceholder(customtkinter.CTkFrame):
+    def __init__(self, parent, import_image_command):
+        super().__init__(master=parent, border_width=2, border_color=('grey75', 'grey25'), fg_color='transparent')
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(4, weight=1)
+
+        self.import_image_command = import_image_command
+
+        self.image_holder = customtkinter.CTkImage(light_image=Image.open(os.path.join(IMAGE_PATH, 'image_holder.png')), dark_image=Image.open(os.path.join(IMAGE_PATH, 'image_holder.png')), size=(100, 100))
+        self.image = customtkinter.CTkLabel(self, image=self.image_holder, text='')
+        self.image.grid(row=1, column=0)
+        self.import_label = customtkinter.CTkLabel(self, text='Please import an image.', font=customtkinter.CTkFont(size=15, weight="bold"))
+        self.import_label.grid(row=2, column=0, pady=10)
+        self.import_button = customtkinter.CTkButton(self, text="Import Image", command=self.import_image_command)
+        self.import_button.grid(row=3, column=0)
+
+class ImageDisplay(Canvas):
+    def __init__(self, parent, resize_image):
+        super().__init__(master=parent, background='#282828', bd=0, highlightthickness=0, relief='ridge')
+        self.bind('<Configure>', resize_image)
