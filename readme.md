@@ -2,10 +2,10 @@
 
 ## Dependenices
 
-- tkinter
+- python-tk
 - customtkinter
 - pillow
-- tkinterdnd2
+- numpy
 
 ## Installation
 

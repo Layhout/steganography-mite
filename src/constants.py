@@ -7,3 +7,11 @@ VALID_IMAGE_FILE_TYPE = {
     'JPG': '.jpg',
     'JPEG': '.jpeg'
 }
+
+STEGANOGRAPHY_METHODS = ['LSB', 'LSBM', 'LSBMR', 'EA-LSBMR', 'PVD']
+
+VALID_ENCODE_FILE_TYPE = {
+    'PNG': '.png',
+    'JPG': '.jpg',
+    'JPEG': '.jpeg'
+}
