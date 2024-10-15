@@ -112,4 +112,6 @@ class Encode(customtkinter.CTkFrame):
         self.change_method_event(STEGANOGRAPHY_METHODS[0])
         self.data_type_optionmenu.set('Text')
         self.change_data_type_event('Text')
+        self.file = None
+        self.text_entry.delete(0.0, 'end')
 

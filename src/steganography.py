@@ -28,7 +28,7 @@ class Steganography:
         message += f'${stop_token}$'
         byte_message = ''.join(f'{ord(c):08b}' for c in message)
         bit = len(byte_message)
-
+        
         if bit > self.image_pixel * 2:
             messagebox.showerror('Error', 'Not enough space to encode.')
             return 'fail'
