@@ -6,6 +6,7 @@
 - customtkinter
 - pillow
 - numpy
+- pycrypto
 
 ## Installation
 
