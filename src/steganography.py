@@ -1,8 +1,9 @@
 import time
 from tkinter import filedialog, messagebox
 from typing import Any
-from PIL import ImageFile, Image
+
 import numpy as np
+from PIL import Image, ImageFile
 
 
 class Steganography:
