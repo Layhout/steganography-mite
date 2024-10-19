@@ -8,25 +8,26 @@ from src.constants import IMAGE_PATH, VALID_IMAGE_FILE_TYPE
 
 
 class ImagePreview(customtkinter.CTkFrame):
-    def __init__(self, parent):
+    def __init__(self, parent, valid_file_type: object = VALID_IMAGE_FILE_TYPE):
         super().__init__(master=parent, corner_radius=0)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.image_placeholder = ImagePlaceholder(self, self.set_image)
         self.image_placeholder.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        self.valid_file_type = valid_file_type
 
         self.image = None
 
     def set_image(self):
         path = filedialog.askopenfile(
-            filetypes=[(k, v) for k, v in VALID_IMAGE_FILE_TYPE.items()]
+            filetypes=[(k, v) for k, v in self.valid_file_type.items()]
         )
         if path is None:
             return
         self.main_image_file_path = path.name
         is_valid_file_type = any(
             self.main_image_file_path.endswith(t)
-            for t in list(VALID_IMAGE_FILE_TYPE.values())
+            for t in list(self.valid_file_type.values())
         )
         if not is_valid_file_type:
             return

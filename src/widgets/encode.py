@@ -2,7 +2,7 @@ from tkinter import filedialog, messagebox
 
 import customtkinter
 
-from src.constants import STEGANOGRAPHY_METHODS, VALID_ENCODE_FILE_TYPE
+from src.constants import STEGANOGRAPHY_METHODS, VALID_IMAGE_FILE_TYPE
 from src.steganography import Steganography
 from src.widgets.image_preview import ImagePreview
 
@@ -109,14 +109,14 @@ class Encode(customtkinter.CTkFrame):
 
     def import_file_event(self):
         path = filedialog.askopenfile(
-            filetypes=[(k, v) for k, v in VALID_ENCODE_FILE_TYPE.items()]
+            filetypes=[(k, v) for k, v in VALID_IMAGE_FILE_TYPE.items()]
         )
         if path is None:
             return
         self.filename = path.name
         self.filename_label.configure(text=self.filename)
         is_valid_file_type = any(
-            self.filename.endswith(t) for t in list(VALID_ENCODE_FILE_TYPE.values())
+            self.filename.endswith(t) for t in list(VALID_IMAGE_FILE_TYPE.values())
         )
         if not is_valid_file_type:
             return

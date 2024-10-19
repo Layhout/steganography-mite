@@ -13,7 +13,7 @@ class Decode(customtkinter.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
-        self.image_preview = ImagePreview(self)
+        self.image_preview = ImagePreview(self, {"PNG": ".png"})
         self.image_preview.grid(row=0, column=0, sticky="nsew")
 
         self.action_frame = customtkinter.CTkFrame(
