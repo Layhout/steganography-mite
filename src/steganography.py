@@ -71,7 +71,7 @@ class Steganography:
         result.save(save_path)
         return "success"
 
-    def lsb_decode(self, password: str):
+    def lsb_decode(self, password: str) -> str:
         secret_bit = [
             bin(self.image_arr[i][j])[2:].zfill(8)[-LSB_AMOUNT:]
             for i in range(self.image_pixel)
@@ -89,19 +89,19 @@ class Steganography:
             enc_message = enc_message[: enc_message.index(self.file_stop_token)]
         else:
             messagebox.showerror("Error", "No message found.")
-            return
+            return "fail"
 
         try:
             message = AESCipher().decrypt(enc_message, password)
         except Exception:
             messagebox.showerror("Error", "Incorrect secret word.")
-            return
+            return "fail"
 
         if not is_file:
             save_path = self.ask_for_file_path("text.txt", [("Text file", ".txt")])
 
             if save_path == "":
-                return
+                return "fail"
 
             f = open(save_path, "w")
             f.write(message)
@@ -111,3 +111,5 @@ class Steganography:
 
             image = Image.open(BytesIO(base64.b64decode(message)))
             image.save(save_path)
+
+        return "success"

@@ -37,7 +37,9 @@ class Decode(customtkinter.CTkFrame):
         self.method_label.grid(row=0, column=0, padx=20, pady=10, sticky="we")
 
         self.method_optionmenu = customtkinter.CTkOptionMenu(
-            self.action_frame, values=STEGANOGRAPHY_METHODS
+            self.action_frame,
+            values=STEGANOGRAPHY_METHODS,
+            command=self.change_method_event,
         )
         self.method_optionmenu.grid(row=1, column=0, padx=20, pady=(0, 10), sticky="we")
 
@@ -45,6 +47,9 @@ class Decode(customtkinter.CTkFrame):
             self.action_frame, text="Decode", command=self.decode_event
         )
         self.encode_button.grid(row=3, column=0, padx=20, pady=10, sticky="we")
+
+    def change_method_event(self, new_method):
+        self.ste_method = new_method
 
     def decode_event(self):
         if self.image_preview.image is None:
@@ -60,4 +65,11 @@ class Decode(customtkinter.CTkFrame):
 
         ste = Steganography(self.image_preview.image)
         if self.method_optionmenu.get() == "LSB":
-            ste.lsb_decode(secret_token)
+            ste_status = ste.lsb_decode(secret_token)
+
+        if ste_status == "fail":
+            return
+
+        self.image_preview.reset_image()
+        self.method_optionmenu.set(STEGANOGRAPHY_METHODS[0])
+        self.change_method_event(STEGANOGRAPHY_METHODS[0])
