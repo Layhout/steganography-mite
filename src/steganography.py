@@ -81,7 +81,6 @@ class Steganography:
         try:
             message = AESCipher().decrypt(enc_message, password)
         except Exception:
-            print(Exception)
             messagebox.showerror("Error", "Incorrect secret word.")
             return
 

@@ -1,3 +1,5 @@
+import base64
+import os
 from tkinter import filedialog, messagebox
 
 import customtkinter
@@ -81,7 +83,7 @@ class Encode(customtkinter.CTkFrame):
             self.action_frame, text="Import File", command=self.import_file_event
         )
         self.filename_label = customtkinter.CTkLabel(
-            self.action_frame, text=self.filename, anchor="e"
+            self.action_frame, text=self.filename, anchor="w"
         )
 
         self.encode_button = customtkinter.CTkButton(
@@ -114,12 +116,15 @@ class Encode(customtkinter.CTkFrame):
         if path is None:
             return
         self.filename = path.name
-        self.filename_label.configure(text=self.filename)
+        self.filename_label.configure(text=os.path.basename(self.filename))
         is_valid_file_type = any(
             self.filename.endswith(t) for t in list(VALID_IMAGE_FILE_TYPE.values())
         )
         if not is_valid_file_type:
             return
+
+        # im = Image.open(BytesIO(base64.b64decode(data)))
+        # im.save("image1.png", "PNG")
 
     def encode_event(self):
         if self.image_preview.image is None:
@@ -140,6 +145,10 @@ class Encode(customtkinter.CTkFrame):
                 if self.filename == "":
                     messagebox.showerror("Error", "Please select a file to encode.")
                     return
+                else:
+                    file = open(self.filename, "rb")
+                    data = base64.b64encode(file.read())
+                    secret_data = data.decode()
 
         if secret_data == "":
             return
