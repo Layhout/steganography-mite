@@ -5,6 +5,7 @@ from typing import Any
 import numpy as np
 from PIL import Image, ImageFile
 
+from src.constants import LSB_AMOUNT
 from src.aes_cipher import AESCipher
 
 
@@ -29,16 +30,12 @@ class Steganography:
         return path
 
     def lsb_encode(self, message: str, password: str, encoded_file_name: str) -> str:
-        print(message)
         enc_message = AESCipher().encrypt(message, password)
-        print(enc_message)
         enc_message += self.stop_token
-        print(enc_message)
-        # return
         byte_message = "".join(f"{ord(c):08b}" for c in enc_message)
         bit = len(byte_message)
 
-        if bit > self.image_pixel * 2:
+        if bit > self.image_pixel * LSB_AMOUNT:
             messagebox.showerror("Error", "Not enough space to encode.")
             return "fail"
 
@@ -47,11 +44,11 @@ class Steganography:
             for j in range(0, 3):
                 if index < bit:
                     self.image_arr[i][j] = int(
-                        bin(self.image_arr[i][j])[2:-2]
-                        + byte_message[index : index + 2],
+                        bin(self.image_arr[i][j])[2:-LSB_AMOUNT]
+                        + byte_message[index : index + LSB_AMOUNT],
                         2,
                     )
-                    index += 2
+                    index += LSB_AMOUNT
 
         self.image_arr = self.image_arr.reshape(
             self.image_height, self.image_width, self.image_channel
@@ -67,7 +64,7 @@ class Steganography:
 
     def lsb_decode(self, password: str):
         secret_bit = [
-            bin(self.image_arr[i][j])[2:].zfill(8)[-2:]
+            bin(self.image_arr[i][j])[2:].zfill(8)[-LSB_AMOUNT:]
             for i in range(self.image_pixel)
             for j in range(0, 3)
         ]
@@ -85,7 +82,7 @@ class Steganography:
             message = AESCipher().decrypt(enc_message, password)
         except Exception:
             print(Exception)
-            messagebox.showerror("Error", "Incorrect password.")
+            messagebox.showerror("Error", "Incorrect secret word.")
             return
 
         save_path = self.ask_for_file_path("text.txt", [("Text file", ".txt")])

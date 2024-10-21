@@ -8,6 +8,10 @@
 - numpy
 - pycrypto
 
+## Requirement
+
+Python version >= 3.12.2
+
 ## Installation
 
 - Create python venv `python3 -m venv`
