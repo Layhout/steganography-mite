@@ -1,3 +1,5 @@
+import base64
+from io import BytesIO
 import time
 from tkinter import filedialog, messagebox
 from typing import Any
@@ -5,7 +7,7 @@ from typing import Any
 import numpy as np
 from PIL import Image, ImageFile
 
-from src.constants import LSB_AMOUNT
+from src.constants import LSB_AMOUNT, ENCODE_DATA_TYPE
 from src.aes_cipher import AESCipher
 
 
@@ -18,7 +20,8 @@ class Steganography:
 
         self.image_channel = 4 if image.mode == "RGBA" else 3
         self.image_pixel = self.image_arr.size // self.image_channel
-        self.stop_token = "$CLH_STE_SP$"
+        self.stop_token = "$CLH_STE_ST$"
+        self.file_stop_token = "$CLH_STE_SF$"
 
     def ask_for_file_path(self, filename: str, filetypes: list[tuple[str, str]]) -> str:
         filename_without_extension = filename[: filename.rindex(".")]
@@ -29,9 +32,15 @@ class Steganography:
         )
         return path
 
-    def lsb_encode(self, message: str, password: str, encoded_file_name: str) -> str:
+    def lsb_encode(
+        self, message: str, password: str, encoded_file_name: str, data_type: str
+    ) -> str:
         enc_message = AESCipher().encrypt(message, password)
-        enc_message += self.stop_token
+        enc_message += (
+            self.stop_token
+            if data_type == ENCODE_DATA_TYPE.get("text")
+            else self.file_stop_token
+        )
         byte_message = "".join(f"{ord(c):08b}" for c in enc_message)
         bit = len(byte_message)
 
@@ -71,9 +80,13 @@ class Steganography:
         secret_bit = "".join(secret_bit)
         secret_bit = [secret_bit[i : i + 8] for i in range(0, len(secret_bit), 8)]
         enc_message = "".join([chr(int(i, 2)) for i in secret_bit])
+        is_file = False
 
         if self.stop_token in enc_message:
             enc_message = enc_message[: enc_message.index(self.stop_token)]
+        elif self.file_stop_token in enc_message:
+            is_file = True
+            enc_message = enc_message[: enc_message.index(self.file_stop_token)]
         else:
             messagebox.showerror("Error", "No message found.")
             return
@@ -84,11 +97,17 @@ class Steganography:
             messagebox.showerror("Error", "Incorrect secret word.")
             return
 
-        save_path = self.ask_for_file_path("text.txt", [("Text file", ".txt")])
+        if not is_file:
+            save_path = self.ask_for_file_path("text.txt", [("Text file", ".txt")])
 
-        if save_path == "":
-            return
+            if save_path == "":
+                return
 
-        f = open(save_path, "w")
-        f.write(message)
-        f.close()
+            f = open(save_path, "w")
+            f.write(message)
+            f.close()
+        else:
+            save_path = self.ask_for_file_path("image.png", [("PNG", ".png")])
+
+            image = Image.open(BytesIO(base64.b64decode(message)))
+            image.save(save_path)

@@ -4,7 +4,11 @@ from tkinter import filedialog, messagebox
 
 import customtkinter
 
-from src.constants import STEGANOGRAPHY_METHODS, VALID_IMAGE_FILE_TYPE
+from src.constants import (
+    STEGANOGRAPHY_METHODS,
+    VALID_IMAGE_FILE_TYPE,
+    ENCODE_DATA_TYPE,
+)
 from src.steganography import Steganography
 from src.widgets.image_preview import ImagePreview
 
@@ -56,13 +60,13 @@ class Encode(customtkinter.CTkFrame):
 
         self.data_type_optionmenu = customtkinter.CTkOptionMenu(
             self.action_frame,
-            values=["Text", "File"],
+            values=list(ENCODE_DATA_TYPE.values()),
             command=self.change_data_type_event,
         )
         self.data_type_optionmenu.grid(
             row=3, column=0, padx=20, pady=(0, 10), sticky="we"
         )
-        self.data_type = "Text"
+        self.data_type = ENCODE_DATA_TYPE.get("text")
 
         self.data_label = customtkinter.CTkLabel(
             self.action_frame,
@@ -93,7 +97,7 @@ class Encode(customtkinter.CTkFrame):
 
     def change_data_type_event(self, new_type):
         self.data_type = new_type
-        if new_type == "Text":
+        if new_type == ENCODE_DATA_TYPE.get("text"):
             self.import_file_button.grid_forget()
             self.filename_label.grid_forget()
             self.text_entry.grid(row=5, column=0, padx=20, pady=(0, 20), sticky="we")
@@ -123,9 +127,6 @@ class Encode(customtkinter.CTkFrame):
         if not is_valid_file_type:
             return
 
-        # im = Image.open(BytesIO(base64.b64decode(data)))
-        # im.save("image1.png", "PNG")
-
     def encode_event(self):
         if self.image_preview.image is None:
             messagebox.showerror("Error", "Please select the main image.")
@@ -133,22 +134,20 @@ class Encode(customtkinter.CTkFrame):
 
         secret_data = ""
 
-        match self.data_type:
-            case "Text":
-                if self.text_entry.get("1.0", "end-1c") == "":
-                    messagebox.showerror("Error", "Please enter data to encode.")
-                    return
-                else:
-                    secret_data = self.text_entry.get("1.0", "end-1c")
-
-            case "File":
-                if self.filename == "":
-                    messagebox.showerror("Error", "Please select a file to encode.")
-                    return
-                else:
-                    file = open(self.filename, "rb")
-                    data = base64.b64encode(file.read())
-                    secret_data = data.decode()
+        if self.data_type == ENCODE_DATA_TYPE.get("text"):
+            if self.text_entry.get("1.0", "end-1c") == "":
+                messagebox.showerror("Error", "Please enter data to encode.")
+                return
+            else:
+                secret_data = self.text_entry.get("1.0", "end-1c")
+        else:
+            if self.filename == "":
+                messagebox.showerror("Error", "Please select a file to encode.")
+                return
+            else:
+                file = open(self.filename, "rb")
+                data = base64.b64encode(file.read())
+                secret_data = data.decode()
 
         if secret_data == "":
             return
@@ -162,11 +161,13 @@ class Encode(customtkinter.CTkFrame):
 
         ste = Steganography(self.image_preview.image)
         ste_status = ""
-        match self.method_optionmenu.get():
-            case "LSB":
-                ste_status = ste.lsb_encode(
-                    secret_data, secret_token, self.image_preview.main_image_filename
-                )
+        if self.method_optionmenu.get() == "LSB":
+            ste_status = ste.lsb_encode(
+                secret_data,
+                secret_token,
+                self.image_preview.main_image_filename,
+                self.data_type,
+            )
 
         if ste_status == "fail":
             return
@@ -174,7 +175,7 @@ class Encode(customtkinter.CTkFrame):
         self.image_preview.reset_image()
         self.method_optionmenu.set(STEGANOGRAPHY_METHODS[0])
         self.change_method_event(STEGANOGRAPHY_METHODS[0])
-        self.data_type_optionmenu.set("Text")
-        self.change_data_type_event("Text")
+        self.data_type_optionmenu.set(ENCODE_DATA_TYPE.get("text"))
+        self.change_data_type_event(ENCODE_DATA_TYPE.get("text"))
         self.file = None
         self.text_entry.delete(0.0, "end")
