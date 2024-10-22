@@ -23,6 +23,4 @@ class AESCipher(object):
         iv = enc[: AES.block_size]
         hash_key = Pdkdf2Hasher.hash(key, iv)
         cipher = AES.new(hash_key, AES.MODE_CBC, iv)
-        return unpad(cipher.decrypt(enc[AES.block_size :]), AES.block_size).decode(
-            "utf-8"
-        )
+        return unpad(cipher.decrypt(enc[AES.block_size :]), AES.block_size).decode()
