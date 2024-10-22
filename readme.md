@@ -6,7 +6,8 @@
 - customtkinter
 - pillow
 - numpy
-- pycrypto
+- pycryptodome
+- matplotlib
 
 ## Requirement
 
