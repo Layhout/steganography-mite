@@ -1,9 +1,9 @@
 from tkinter import messagebox
 
 import customtkinter
-from matplotlib.ticker import MaxNLocator
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 from src.widgets.image_preview import ImagePreview
 
@@ -15,6 +15,8 @@ class Compare(customtkinter.CTkFrame):
         self.grid_rowconfigure(0, weight=1)
 
         self.border_width = 2
+        self.fig = None
+        self.cid = None
 
         self.image_preview_1 = ImagePreview(self, lable_text="Select image 1.")
         self.image_preview_1.grid(row=0, column=0, sticky="nsew")
@@ -69,7 +71,9 @@ class Compare(customtkinter.CTkFrame):
         try:
             plt.ion()
 
-            fig, axs = plt.subplots(1, 2, figsize=(15, 5), sharex=True, sharey=True)
+            self.fig, axs = plt.subplots(
+                1, 2, figsize=(15, 5), sharex=True, sharey=True
+            )
 
             axs[0].imshow(np.asarray(self.image_preview_1.image))
             axs[1].imshow(np.asarray(self.image_preview_2.image))
@@ -78,10 +82,10 @@ class Compare(customtkinter.CTkFrame):
                 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
                 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 
-            # cid = fig.canvas.mpl_connect("button_press_event", lambda: print("Pressed"))
-            # fig.canvas.mpl_disconnect(cid)
-
-            fig.canvas.mpl_connect("close_event", lambda: print("close_event"))
+            self.cid = self.fig.canvas.mpl_connect(
+                "button_press_event", self.on_click_fig
+            )
+            self.fig.canvas.mpl_connect("close_event", self.on_close_fig)
 
             plt.tight_layout()
             plt.show()
@@ -89,15 +93,21 @@ class Compare(customtkinter.CTkFrame):
             print(Exception)
 
     def on_click_fig(self, event):
-        print("123")
-        print(
-            "%s click: button=%d, x=%d, y=%d, xdata=%f, ydata=%f"
-            % (
-                "double" if event.dblclick else "single",
-                event.button,
-                event.x,
-                event.y,
-                event.xdata,
-                event.ydata,
-            )
-        )
+        pixels_image_1 = self.image_preview_1.image.load()
+        pixels_image_2 = self.image_preview_2.image.load()
+
+        x = round(event.xdata)
+        y = round(event.ydata)
+
+        if event.dblclick:
+            print(f"double click on x: {x}, y: {y}")
+            print(pixels_image_1[x, y])
+            print(pixels_image_2[x, y])
+
+    def on_close_fig(self, event):
+        if self.cid is None or self.fig is None:
+            return
+
+        self.fig.canvas.mpl_disconnect(self.cid)
+        self.cid = None
+        self.fig = None
