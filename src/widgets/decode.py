@@ -65,11 +65,4 @@ class Decode(customtkinter.CTkFrame):
 
         ste = Steganography(self.image_preview.image)
         if self.method_optionmenu.get() == "LSB":
-            ste_status = ste.lsb_decode(secret_token)
-
-        if ste_status == "fail":
-            return
-
-        self.image_preview.reset_image()
-        self.method_optionmenu.set(STEGANOGRAPHY_METHODS[0])
-        self.change_method_event(STEGANOGRAPHY_METHODS[0])
+            ste.lsb_decode(secret_token)

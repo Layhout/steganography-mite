@@ -8,11 +8,17 @@ from src.constants import IMAGE_PATH, VALID_IMAGE_FILE_TYPE
 
 
 class ImagePreview(customtkinter.CTkFrame):
-    def __init__(self, parent, valid_file_type: object = VALID_IMAGE_FILE_TYPE):
+    def __init__(
+        self,
+        parent,
+        valid_file_type: object = VALID_IMAGE_FILE_TYPE,
+        lable_text="Select an image.",
+    ):
         super().__init__(master=parent, corner_radius=0)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        self.image_placeholder = ImagePlaceholder(self, self.set_image)
+        self.lable_text = lable_text
+        self.image_placeholder = ImagePlaceholder(self, self.set_image, self.lable_text)
         self.image_placeholder.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.valid_file_type = valid_file_type
 
@@ -75,7 +81,7 @@ class ImagePreview(customtkinter.CTkFrame):
 
 
 class ImagePlaceholder(customtkinter.CTkFrame):
-    def __init__(self, parent, import_image_command):
+    def __init__(self, parent, import_image_command, lable_text):
         super().__init__(
             master=parent,
             border_width=2,
@@ -83,8 +89,7 @@ class ImagePlaceholder(customtkinter.CTkFrame):
             fg_color="transparent",
         )
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_rowconfigure(4, weight=1)
+        self.grid_rowconfigure((0, 4), weight=1)
 
         self.import_image_command = import_image_command
 
@@ -97,7 +102,7 @@ class ImagePlaceholder(customtkinter.CTkFrame):
         self.image.grid(row=1, column=0)
         self.import_label = customtkinter.CTkLabel(
             self,
-            text="Select an main image.",
+            text=lable_text,
             font=customtkinter.CTkFont(size=16, weight="bold"),
         )
         self.import_label.grid(row=2, column=0, pady=10)

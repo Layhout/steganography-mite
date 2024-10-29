@@ -27,7 +27,7 @@ class Steganography:
         filename_without_extension = filename[: filename.rindex(".")]
         current_timestamp = int(time.time())
         path = filedialog.asksaveasfilename(
-            initialfile=f"{filename_without_extension}-ste-de-{current_timestamp}",
+            initialfile=f"{filename_without_extension}-ste-{current_timestamp}",
             filetypes=filetypes,
         )
         return path
