@@ -69,8 +69,6 @@ class Compare(customtkinter.CTkFrame):
             return
 
         try:
-            plt.ion()
-
             self.fig, axs = plt.subplots(
                 1, 2, figsize=(15, 5), sharex=True, sharey=True
             )
