@@ -94,10 +94,28 @@ class Compare(customtkinter.CTkFrame):
         pixels_image_1 = self.image_preview_1.image.load()
         pixels_image_2 = self.image_preview_2.image.load()
 
-        x = round(event.xdata)
-        y = round(event.ydata)
+        if event.button == 3:
+            pixel_string = customtkinter.CTkInputDialog(
+                text="Input pixel at (x, y)", title="Inspect Pixel"
+            ).get_input()
+
+            if pixel_string == "":
+                return
+
+            xString, yString = pixel_string.split(",")
+
+            try:
+                xInt = int(xString)
+                yInt = int(yString)
+
+                print(pixels_image_1[xInt, yInt])
+                print(pixels_image_2[yInt, yInt])
+            except Exception:
+                messagebox.showerror("Error", "Invalid pixel string format.")
 
         if event.dblclick:
+            x = round(event.xdata)
+            y = round(event.ydata)
             print(f"double click on x: {x}, y: {y}")
             print(pixels_image_1[x, y])
             print(pixels_image_2[x, y])
