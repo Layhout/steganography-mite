@@ -27,5 +27,3 @@ class ComparePixelWindow(customtkinter.CTkToplevel):
 
         self.pixel_2_info = PixelInfo(self, pixel_2)
         self.pixel_2_info.grid(row=0, column=2, sticky="nsew")
-
-        print((pixel_1, pixel_2))
