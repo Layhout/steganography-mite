@@ -41,6 +41,6 @@ class PixelInfo(customtkinter.CTkFrame):
         self.hex_color_label.grid(row=2, column=0)
 
         self.binary_val_label = customtkinter.CTkLabel(
-            self, anchor="w", text=f"Binary: {self.binary_val}"
+            self, anchor="w", text=f"Binary:\n{self.binary_val}"
         )
         self.binary_val_label.grid(row=3, column=0)
