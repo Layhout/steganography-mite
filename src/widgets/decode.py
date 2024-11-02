@@ -3,7 +3,7 @@ from tkinter import messagebox
 import customtkinter
 
 from src.constants import STEGANOGRAPHY_METHODS
-from src.steganography import Steganography
+from src.utils.steganography import Steganography
 from src.widgets.image_preview import ImagePreview
 
 

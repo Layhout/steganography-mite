@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt
 from matplotlib.ticker import MaxNLocator
 
 from src.widgets.image_preview import ImagePreview
+from src.windows.compare_pixel import ComparePixelWindow
 
 
 class Compare(customtkinter.CTkFrame):
@@ -17,6 +18,7 @@ class Compare(customtkinter.CTkFrame):
         self.border_width = 2
         self.fig = None
         self.cid = None
+        self.compare_pixel_window = None
 
         self.image_preview_1 = ImagePreview(self, lable_text="Select image 1.")
         self.image_preview_1.grid(row=0, column=0, sticky="nsew")
@@ -96,7 +98,7 @@ class Compare(customtkinter.CTkFrame):
 
         if event.button == 3:
             pixel_string = customtkinter.CTkInputDialog(
-                text="Input pixel at (x, y)", title="Inspect Pixel"
+                text="Input pixel at 'x, y'", title="Inspect Pixel"
             ).get_input()
 
             if pixel_string == "":
@@ -108,17 +110,22 @@ class Compare(customtkinter.CTkFrame):
                 xInt = int(xString)
                 yInt = int(yString)
 
-                print(pixels_image_1[xInt, yInt])
-                print(pixels_image_2[yInt, yInt])
+                self.open_compare_pixel_window(
+                    pixels_image_1[xInt, yInt],
+                    pixels_image_2[xInt, yInt],
+                )
+
             except Exception:
                 messagebox.showerror("Error", "Invalid pixel string format.")
 
         if event.dblclick:
             x = round(event.xdata)
             y = round(event.ydata)
-            print(f"double click on x: {x}, y: {y}")
-            print(pixels_image_1[x, y])
-            print(pixels_image_2[x, y])
+
+            self.open_compare_pixel_window(
+                pixels_image_1[x, y],
+                pixels_image_2[x, y],
+            )
 
     def on_close_fig(self, event):
         if self.cid is None or self.fig is None:
@@ -127,3 +134,12 @@ class Compare(customtkinter.CTkFrame):
         self.fig.canvas.mpl_disconnect(self.cid)
         self.cid = None
         self.fig = None
+
+    def open_compare_pixel_window(self, pixel_1, pixel_2):
+        if (
+            self.compare_pixel_window is None
+            or not self.compare_pixel_window.winfo_exists()
+        ):
+            self.compare_pixel_window = ComparePixelWindow(self, pixel_1, pixel_2)
+        else:
+            self.compare_pixel_window.focus()

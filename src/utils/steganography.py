@@ -8,7 +8,7 @@ import numpy as np
 from PIL import Image, ImageFile
 
 from src.constants import LSB_AMOUNT, ENCODE_DATA_TYPE
-from src.aes_cipher import AESCipher
+from src.utils.aes_cipher import AESCipher
 
 
 class Steganography:
@@ -19,7 +19,7 @@ class Steganography:
         self.image_arr: np.ndarray[Any] = np.array(list(self.image.getdata()))
 
         self.image_channel = 4 if image.mode == "RGBA" else 3
-        self.image_pixel = self.image_arr.size // self.image_channel
+        self.image_pixel = self.image_arr.size // 3
         self.stop_token = "$CLH_STE_ST$"
         self.file_stop_token = "$CLH_STE_SF$"
 
@@ -108,6 +108,9 @@ class Steganography:
             f.close()
         else:
             save_path = self.ask_for_file_path("image.png", [("PNG", ".png")])
+
+            if save_path == "":
+                return "fail"
 
             image = Image.open(BytesIO(base64.b64decode(message)))
             image.save(save_path)

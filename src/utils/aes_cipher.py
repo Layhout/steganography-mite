@@ -4,7 +4,7 @@ from Crypto import Random
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 
-from src.pbkdf2_hasher import Pdkdf2Hasher
+from src.utils.pbkdf2_hasher import Pdkdf2Hasher
 
 
 class AESCipher(object):

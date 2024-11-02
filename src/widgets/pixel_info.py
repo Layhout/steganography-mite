@@ -1,0 +1,22 @@
+import customtkinter
+
+
+class PixelInfo(customtkinter.CTkFrame):
+    def __init__(self, parent, pixel):
+        super().__init__(master=parent, corner_radius=0)
+        self.grid_columnconfigure(0, weight=1)
+
+        self.r = pixel[0]
+        self.g = pixel[1]
+        self.b = pixel[2]
+        self.hex_color = "#{:02x}{:02x}{:02x}".format(self.r, self.g, self.b)
+
+        self.color_display = customtkinter.CTkFrame(
+            self,
+            corner_radius=0,
+            width=100,
+            height=100,
+            fg_color="transparent",
+            bg_color=self.hex_color,
+        )
+        self.color_display.grid(row=0, column=0)

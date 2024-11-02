@@ -9,7 +9,7 @@ from src.constants import (
     VALID_IMAGE_FILE_TYPE,
     ENCODE_DATA_TYPE,
 )
-from src.steganography import Steganography
+from src.utils.steganography import Steganography
 from src.widgets.image_preview import ImagePreview
 
 

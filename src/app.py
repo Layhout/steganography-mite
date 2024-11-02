@@ -15,7 +15,7 @@ class App(customtkinter.CTk):
 
         # Configure window
         self.title("Steganography")
-        self.geometry(f"{1280}x{720}")
+        self.geometry("1280x720")
         self.resizable(False, False)
 
         # Configure grid layout
