@@ -113,6 +113,8 @@ class Compare(customtkinter.CTkFrame):
                 self.open_compare_pixel_window(
                     pixels_image_1[xInt, yInt],
                     pixels_image_2[xInt, yInt],
+                    xInt,
+                    yInt,
                 )
 
             except Exception:
@@ -125,6 +127,8 @@ class Compare(customtkinter.CTkFrame):
             self.open_compare_pixel_window(
                 pixels_image_1[x, y],
                 pixels_image_2[x, y],
+                x,
+                y,
             )
 
     def on_close_fig(self, event):
@@ -135,11 +139,11 @@ class Compare(customtkinter.CTkFrame):
         self.cid = None
         self.fig = None
 
-    def open_compare_pixel_window(self, pixel_1, pixel_2):
+    def open_compare_pixel_window(self, pixel_1, pixel_2, x, y):
         if (
             self.compare_pixel_window is None
             or not self.compare_pixel_window.winfo_exists()
         ):
-            self.compare_pixel_window = ComparePixelWindow(self, pixel_1, pixel_2)
+            self.compare_pixel_window = ComparePixelWindow(self, pixel_1, pixel_2, x, y)
         else:
             self.compare_pixel_window.focus()

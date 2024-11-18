@@ -7,7 +7,7 @@ from typing import Any
 import numpy as np
 from PIL import Image, ImageFile
 
-from src.constants import LSB_AMOUNT, ENCODE_DATA_TYPE
+from src.constants import LSB_AMOUNT, ENCODE_DATA_TYPE, STOP_TOKEN, FILE_STOP_TOKEN
 from src.utils.aes_cipher import AESCipher
 
 
@@ -19,9 +19,11 @@ class Steganography:
         self.image_arr: np.ndarray[Any] = np.array(list(self.image.getdata()))
 
         self.image_channel = 4 if image.mode == "RGBA" else 3
+        print(self.image_channel)
         self.image_pixel = self.image_arr.size // self.image_channel
-        self.stop_token = "$CLH_STE_ST$"
-        self.file_stop_token = "$CLH_STE_SF$"
+        print(self.image_pixel)
+        self.stop_token = STOP_TOKEN
+        self.file_stop_token = FILE_STOP_TOKEN
 
     def ask_for_file_path(self, filename: str, filetypes: list[tuple[str, str]]) -> str:
         filename_without_extension = filename[: filename.rindex(".")]
