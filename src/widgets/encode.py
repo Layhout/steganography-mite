@@ -34,21 +34,21 @@ class Encode(customtkinter.CTkFrame):
         self.action_frame.grid(row=0, column=1, sticky="nsew")
         self.action_frame.grid_propagate(0)
 
-        self.method_label = customtkinter.CTkLabel(
-            self.action_frame,
-            text="Method",
-            anchor="w",
-            font=customtkinter.CTkFont(size=14, weight="bold"),
-        )
-        self.method_label.grid(row=0, column=0, padx=20, pady=10, sticky="we")
+        # self.method_label = customtkinter.CTkLabel(
+        #     self.action_frame,
+        #     text="Method",
+        #     anchor="w",
+        #     font=customtkinter.CTkFont(size=14, weight="bold"),
+        # )
+        # self.method_label.grid(row=0, column=0, padx=20, pady=10, sticky="we")
 
-        self.method_optionmenu = customtkinter.CTkOptionMenu(
-            self.action_frame,
-            values=STEGANOGRAPHY_METHODS,
-            command=self.change_method_event,
-        )
-        self.method_optionmenu.grid(row=1, column=0, padx=20, pady=(0, 10), sticky="we")
-        self.new_method = STEGANOGRAPHY_METHODS[0]
+        # self.method_optionmenu = customtkinter.CTkOptionMenu(
+        #     self.action_frame,
+        #     values=STEGANOGRAPHY_METHODS,
+        #     command=self.change_method_event,
+        # )
+        # self.method_optionmenu.grid(row=1, column=0, padx=20, pady=(0, 10), sticky="we")
+        # self.new_method = STEGANOGRAPHY_METHODS[0]
 
         self.data_type_label = customtkinter.CTkLabel(
             self.action_frame,

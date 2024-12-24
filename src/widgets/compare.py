@@ -20,7 +20,7 @@ class Compare(customtkinter.CTkFrame):
         self.cid = None
         self.compare_pixel_window = None
 
-        self.image_preview_1 = ImagePreview(self, lable_text="Select image 1.")
+        self.image_preview_1 = ImagePreview(self, lable_text="Select original image.")
         self.image_preview_1.grid(row=0, column=0, sticky="nsew")
         self.image_preview_1.grid_propagate(0)
 
@@ -34,7 +34,7 @@ class Compare(customtkinter.CTkFrame):
         self.separator.grid(row=0, column=1, sticky="nsew")
         self.separator.grid_propagate(0)
 
-        self.image_preview_2 = ImagePreview(self, lable_text="Select image 2.")
+        self.image_preview_2 = ImagePreview(self, lable_text="Select compared image.")
         self.image_preview_2.grid(row=0, column=2, sticky="nsew")
         self.image_preview_2.grid_propagate(0)
 
@@ -61,7 +61,7 @@ class Compare(customtkinter.CTkFrame):
         self.compare_button = customtkinter.CTkButton(
             self.action_frame,
             text="Compare",
-            command=self.compare_images_event,
+            command=self.ask_for_pixel,
         )
         self.compare_button.grid(row=0, column=0)
 
@@ -97,28 +97,7 @@ class Compare(customtkinter.CTkFrame):
         pixels_image_2 = self.image_preview_2.image.load()
 
         if event.button == 3:
-            pixel_string = customtkinter.CTkInputDialog(
-                text="Input pixel at 'x, y'", title="Inspect Pixel"
-            ).get_input()
-
-            if pixel_string == "":
-                return
-
-            xString, yString = pixel_string.split(",")
-
-            try:
-                xInt = int(xString)
-                yInt = int(yString)
-
-                self.open_compare_pixel_window(
-                    pixels_image_1[xInt, yInt],
-                    pixels_image_2[xInt, yInt],
-                    xInt,
-                    yInt,
-                )
-
-            except Exception:
-                messagebox.showerror("Error", "Invalid pixel string format.")
+            self.ask_for_pixel()
 
         if event.dblclick:
             x = round(event.xdata)
@@ -138,6 +117,33 @@ class Compare(customtkinter.CTkFrame):
         self.fig.canvas.mpl_disconnect(self.cid)
         self.cid = None
         self.fig = None
+
+    def ask_for_pixel(self):
+        pixels_image_1 = self.image_preview_1.image.load()
+        pixels_image_2 = self.image_preview_2.image.load()
+
+        pixel_string = customtkinter.CTkInputDialog(
+            text="Input pixel at 'x, y'", title="Inspect Pixel"
+        ).get_input()
+
+        if pixel_string == "":
+            return
+
+        xString, yString = pixel_string.split(",")
+
+        try:
+            xInt = int(xString)
+            yInt = int(yString)
+
+            self.open_compare_pixel_window(
+                pixels_image_1[xInt, yInt],
+                pixels_image_2[xInt, yInt],
+                xInt,
+                yInt,
+            )
+
+        except Exception:
+            messagebox.showerror("Error", "Invalid pixel string format.")
 
     def open_compare_pixel_window(self, pixel_1, pixel_2, x, y):
         if (

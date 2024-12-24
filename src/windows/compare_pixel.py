@@ -39,7 +39,7 @@ class ComparePixelWindow(customtkinter.CTkToplevel):
         self.separator.grid(row=1, column=0, columnspan=3, sticky="nsew")
         self.separator.grid_propagate(0)
 
-        self.pixel_1_info = PixelInfo(self, pixel_1)
+        self.pixel_1_info = PixelInfo(self, pixel_1, "Original")
         self.pixel_1_info.grid(row=2, column=0, sticky="nsew")
 
         self.separator_1 = customtkinter.CTkFrame(
@@ -52,5 +52,5 @@ class ComparePixelWindow(customtkinter.CTkToplevel):
         self.separator_1.grid(row=2, column=1, sticky="nsew")
         self.separator_1.grid_propagate(0)
 
-        self.pixel_2_info = PixelInfo(self, pixel_2)
+        self.pixel_2_info = PixelInfo(self, pixel_2, "Compared")
         self.pixel_2_info.grid(row=2, column=2, sticky="nsew")
