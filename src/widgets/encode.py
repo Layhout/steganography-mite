@@ -161,13 +161,13 @@ class Encode(customtkinter.CTkFrame):
 
         ste = Steganography(self.image_preview.image)
         ste_status = ""
-        if self.method_optionmenu.get() == "LSB":
-            ste_status = ste.lsb_encode(
-                secret_data,
-                secret_token,
-                self.image_preview.main_image_filename,
-                self.data_type,
-            )
+        # if self.method_optionmenu.get() == "LSB":
+        ste_status = ste.lsb_encode(
+            secret_data,
+            secret_token,
+            self.image_preview.main_image_filename,
+            self.data_type,
+        )
 
         if ste_status == "fail":
             return
