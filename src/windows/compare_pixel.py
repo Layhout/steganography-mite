@@ -52,5 +52,5 @@ class ComparePixelWindow(customtkinter.CTkToplevel):
         self.separator_1.grid(row=2, column=1, sticky="nsew")
         self.separator_1.grid_propagate(0)
 
-        self.pixel_2_info = PixelInfo(self, pixel_2, "Compared")
+        self.pixel_2_info = PixelInfo(self, pixel_2, "Encoded")
         self.pixel_2_info.grid(row=2, column=2, sticky="nsew")

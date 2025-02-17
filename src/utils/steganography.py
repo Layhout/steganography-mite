@@ -31,6 +31,7 @@ class Steganography:
         path = filedialog.asksaveasfilename(
             initialfile=f"{filename_without_extension}-ste-{current_timestamp}",
             filetypes=filetypes,
+            defaultextension=filetypes[0][1],
         )
         return path
 

@@ -34,7 +34,7 @@ class Compare(customtkinter.CTkFrame):
         self.separator.grid(row=0, column=1, sticky="nsew")
         self.separator.grid_propagate(0)
 
-        self.image_preview_2 = ImagePreview(self, lable_text="Select compared image.")
+        self.image_preview_2 = ImagePreview(self, lable_text="Select encoded image.")
         self.image_preview_2.grid(row=0, column=2, sticky="nsew")
         self.image_preview_2.grid_propagate(0)
 

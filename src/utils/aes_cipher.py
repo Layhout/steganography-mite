@@ -8,9 +8,6 @@ from src.utils.pbkdf2_hasher import Pdkdf2Hasher
 
 
 class AESCipher(object):
-    def __init__(self):
-        self.bs = AES.block_size
-
     def encrypt(self, raw: str, key: str) -> str:
         raw = pad(raw.encode(), AES.block_size)
         iv = Random.new().read(AES.block_size)
