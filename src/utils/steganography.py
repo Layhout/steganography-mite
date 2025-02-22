@@ -19,9 +19,7 @@ class Steganography:
         self.image_arr: np.ndarray[Any] = np.array(list(self.image.getdata()))
 
         self.image_channel = 4 if image.mode == "RGBA" else 3
-        print(self.image_channel)
         self.image_pixel = self.image_arr.size // self.image_channel
-        print(self.image_pixel)
         self.stop_token = STOP_TOKEN
         self.file_stop_token = FILE_STOP_TOKEN
 

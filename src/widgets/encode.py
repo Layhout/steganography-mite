@@ -5,7 +5,6 @@ from tkinter import filedialog, messagebox
 import customtkinter
 
 from src.constants import (
-    STEGANOGRAPHY_METHODS,
     VALID_IMAGE_FILE_TYPE,
     ENCODE_DATA_TYPE,
 )
@@ -160,7 +159,7 @@ class Encode(customtkinter.CTkFrame):
             return
 
         ste = Steganography(self.image_preview.image)
-        ste_status = ""
+        # ste_status = ""
         # if self.method_optionmenu.get() == "LSB":
         ste_status = ste.lsb_encode(
             secret_data,
@@ -173,8 +172,8 @@ class Encode(customtkinter.CTkFrame):
             return
 
         self.image_preview.reset_image()
-        self.method_optionmenu.set(STEGANOGRAPHY_METHODS[0])
-        self.change_method_event(STEGANOGRAPHY_METHODS[0])
+        # self.method_optionmenu.set(STEGANOGRAPHY_METHODS[0])
+        # self.change_method_event(STEGANOGRAPHY_METHODS[0])
         self.data_type_optionmenu.set(ENCODE_DATA_TYPE.get("text"))
         self.change_data_type_event(ENCODE_DATA_TYPE.get("text"))
         self.file = None
