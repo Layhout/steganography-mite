@@ -126,7 +126,7 @@ class Compare(customtkinter.CTkFrame):
             text="Input pixel at 'x, y'", title="Inspect Pixel"
         ).get_input()
 
-        if pixel_string == "":
+        if pixel_string == "" or pixel_string is None:
             return
 
         xString, yString = pixel_string.split(",")

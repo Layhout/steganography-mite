@@ -4,3 +4,7 @@ lib
 pyvenv.cfg
 .DS_Store
 __pycache__
+Scripts
+shared
+share
+test_case

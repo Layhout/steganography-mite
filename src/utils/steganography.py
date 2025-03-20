@@ -104,7 +104,7 @@ class Steganography:
             if save_path == "":
                 return "fail"
 
-            f = open(save_path, "w")
+            f = open(save_path, "w", encoding="utf-8")
             f.write(message)
             f.close()
         else:
