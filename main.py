@@ -4,5 +4,5 @@ if __name__ == "__main__":
     try:
         app = App()
         app.mainloop()
-    except Exception as e:
+    except Exception as _:
         pass
