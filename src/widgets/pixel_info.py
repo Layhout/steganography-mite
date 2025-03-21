@@ -26,7 +26,7 @@ class PixelInfo(customtkinter.CTkFrame):
             text=name,
             font=customtkinter.CTkFont(size=16, weight="bold"),
         )
-        self.color_rgb_label.grid(row=0, column=0)
+        self.color_rgb_label.grid(row=0, column=0, pady=(10, 0))
 
         self.color_display = customtkinter.CTkFrame(
             self,

@@ -6,7 +6,7 @@ from src.widgets.pixel_info import PixelInfo
 class ComparePixelWindow(customtkinter.CTkToplevel):
     def __init__(self, parent, pixel_1, pixel_2, x, y):
         super().__init__(parent)
-        self.geometry("500x350")
+        self.geometry("500x400")
         self.resizable(False, False)
 
         self.columnconfigure((0, 2), weight=1)
